@@ -1607,17 +1607,7 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *ethconfig.Config) {
 		}
 	}
 	if ctx.GlobalIsSet(HTTPRpcTimeoutFlag.Name) {
-		arg := ctx.GlobalString(HTTPRpcTimeoutFlag.Name)
-		_, err := strconv.Atoi(arg)
-		if err == nil {
-			arg = arg + "ns"
-		}
-		timeout, err := time.ParseDuration(arg)
-		if err != nil {
-			log.Warn("Bad http.timeout setting", arg)
-			timeout = ethconfig.Defaults.HTTPRpcTimeout
-		}
-		cfg.HTTPRpcTimeout = timeout
+		cfg.HTTPRpcTimeout = ctx.GlobalDuration(HTTPRpcTimeoutFlag.Name)
 	}
 	// Override any default configs for hard coded networks.
 	switch {
